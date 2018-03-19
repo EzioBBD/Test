@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -59,6 +58,7 @@ namespace WordCount
             File.WriteAllText(outputFlie, result);
         }
 
+        //对-c -w -l -a命令的处理
         static void DisposeFile(string[] args, string fileName, int indexOfFile)
         {
             string[] infos = new string[4];
@@ -76,12 +76,14 @@ namespace WordCount
             outputInfo.Add(infos);
         }
 
+        //获取字符数
         static string GetCharNum(string fileName)
         {
             string text = File.ReadAllText(fileName);
             return fileName + ",字符数：" + text.Length.ToString() + "\r\n";
         }
 
+        //获取单词数
         static string GetWordNum(string fileName)
         {
             string[] text = File.ReadAllLines(fileName);
@@ -103,18 +105,21 @@ namespace WordCount
             return fileName + ",单词数：" + wordNum.ToString() + "\r\n";
         }
 
+        //获取行数
         static string GetLineNum(string fileName)
         {
             string[] text = File.ReadAllLines(fileName);
             return fileName + ",行数：" + text.Length.ToString() + "\r\n";
         }
 
+        //获取代码行/空行/注释行
         static string GetMoreInfo(string fileName)
         {
             int codeLine = 0, blankLine = 0, noteLine = 0;
             string[] text = File.ReadAllLines(fileName);
             foreach (string line in text)
             {
+                //此处采用正则表达式判断空行和注释行
                 if (Regex.IsMatch(line, @"^\s*{?\s*$"))
                     ++blankLine;
                 else if (Regex.IsMatch(line, @"^}?//"))
@@ -125,7 +130,8 @@ namespace WordCount
             return fileName + ",代码行/空行/注释行：" + codeLine.ToString() + "/"
                 + blankLine.ToString() + "/" + noteLine.ToString() + "\r\n";
         }
-
+  
+        //处理目录下所有符合条件的文件
         static void DisposeAllFile(string path, string pattern)
         {
             DirectoryInfo root = new DirectoryInfo(path);
@@ -136,6 +142,7 @@ namespace WordCount
                 DisposeAllFile(directory.FullName, pattern);
         }
 
+        //保存停用词表的单词
         static void AddStopList(string fileName)
         {
             string text = File.ReadAllText(fileName);
