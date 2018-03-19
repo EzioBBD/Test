@@ -1,2 +1,0 @@
-wordtest.c,单词数：5
-wordtest.c,代码行/空行/注释行：3/1/0
